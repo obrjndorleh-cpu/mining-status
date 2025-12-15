@@ -1,251 +1,114 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="20">
-    <title>Video Monitor - 2025-12-14 22:14:07</title>
+    <meta http-equiv="refresh" content="15">
+    <title>Mining Status - 2025-12-14 22:40:37</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0f172a;
-            color: #e2e8f0;
-            padding: 15px;
-        }
-
-        .container {
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
-            border: 1px solid #334155;
-        }
-
-        .header h1 {
-            color: #60a5fa;
-            font-size: 2em;
-            margin-bottom: 8px;
-        }
-
-        .status-live {
-            display: inline-block;
-            padding: 6px 14px;
-            border-radius: 15px;
-            background: #ef4444;
-            color: white;
-            font-weight: bold;
-            font-size: 0.9em;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: 1.5fr 1fr;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        @media (max-width: 1200px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .card {
-            background: #1e293b;
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid #334155;
-        }
-
-        .card h2 {
-            color: #60a5fa;
-            margin-bottom: 15px;
-            font-size: 1.3em;
-            border-bottom: 2px solid #334155;
-            padding-bottom: 8px;
-        }
-
-        .video-container {
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%;
-            margin-bottom: 15px;
+            font-family: -apple-system, sans-serif;
             background: #000;
-            border-radius: 8px;
-            overflow: hidden;
+            color: #0f0;
+            padding: 20px;
+            font-size: 14px;
         }
-
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .video-info {
-            background: #0f172a;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
-
-        .video-title {
-            font-weight: 600;
-            color: #e2e8f0;
-            margin-bottom: 6px;
-            font-size: 0.95em;
-        }
-
-        .video-status {
-            color: #fbbf24;
-            font-size: 0.85em;
-        }
-
-        .activity-item {
-            background: #0f172a;
-            padding: 12px;
-            margin: 8px 0;
-            border-radius: 8px;
-            border-left: 4px solid;
-        }
-
-        .activity-accepted {
-            border-color: #10b981;
-        }
-
-        .activity-rejected {
-            border-color: #ef4444;
-        }
-
-        .activity-score {
-            font-weight: bold;
-            font-size: 1.1em;
-        }
-
-        .score-good { color: #10b981; }
-        .score-bad { color: #ef4444; }
-
-        .progress-bar {
-            width: 100%;
-            height: 30px;
-            background: #0f172a;
-            border-radius: 15px;
-            overflow: hidden;
+        .section {
+            background: #111;
+            border: 1px solid #0f0;
+            padding: 15px;
             margin: 15px 0;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 0.9em;
-        }
-
-        .thumbnail-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-            max-height: 600px;
-            overflow-y: auto;
-        }
-
-        .thumbnail-item {
-            background: #0f172a;
             border-radius: 8px;
+        }
+        h2 {
+            color: #0f0;
+            margin: 0 0 10px 0;
+            font-size: 18px;
+        }
+        .stat {
+            margin: 8px 0;
+            font-family: monospace;
+        }
+        .label {
+            color: #888;
+            display: inline-block;
+            width: 140px;
+        }
+        .value {
+            color: #0f0;
+            font-weight: bold;
+        }
+        .activity {
+            margin: 5px 0;
+            padding: 8px;
+            background: #1a1a1a;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .skipped { color: #ffa500; }
+        .accepted { color: #0f0; }
+        .rejected { color: #f44; }
+        .progress {
+            background: #333;
+            height: 30px;
+            border-radius: 4px;
             overflow: hidden;
-            border: 1px solid #334155;
+            position: relative;
         }
-
-        .thumbnail-item img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            cursor: pointer;
-            transition: opacity 0.2s;
+        .progress-fill {
+            background: #0f0;
+            height: 100%;
+            transition: width 0.3s;
         }
-
-        .thumbnail-item img:hover {
-            opacity: 0.8;
-        }
-
-        .thumbnail-info {
-            padding: 10px;
-        }
-
-        .no-video {
-            text-align: center;
-            padding: 60px 20px;
-            color: #64748b;
-        }
-
-        .no-video-icon {
-            font-size: 4em;
-            margin-bottom: 15px;
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🎬 Live Video Monitor</h1>
-            <div style="font-size: 0.85em; color: #94a3b8; margin-bottom: 8px;">2025-12-14 22:14:07</div>
-            <div class="status-live">🔴 LIVE</div>
-        </div>
+    <h1 style="color: #0f0; margin: 0 0 20px 0;">⛏️ MINING STATUS</h1>
+    <div style="color: #888; margin-bottom: 20px;">2025-12-14 22:40:37 | Auto-refresh: 15s</div>
 
-        <div class="card" style="margin-bottom: 15px;">
-            <h2>📊 Progress: 11/100 Demos</h2>
-            <div class="progress-bar">
-                <div class="progress-fill" style="width: 11.0%">
-                    11.0%
-                </div>
-            </div>
-        </div>
+    <div class="section">
+        <h2>📊 SESSION STATS (Current Run)</h2>
+        <div class="stat"><span class="label">Runtime:</span><span class="value">2.32 hours</span></div>
+        <div class="stat"><span class="label">Videos Analyzed:</span><span class="value">1,290</span></div>
+        <div class="stat"><span class="label">Videos Accepted:</span><span class="value">5</span></div>
+        <div class="stat"><span class="label">Queries Executed:</span><span class="value">430</span></div>
+        <div class="stat"><span class="label">Acceptance Rate:</span><span class="value">0.4%</span></div>
+        <div class="stat"><span class="label">Current Query:</span><span class="value">pressing switch tutorial</span></div>
+    </div>
 
-        <div class="grid">
-            <div class="card">
-                <h2>🎥 Currently Processing</h2>
-
-                <div class="no-video">
-                    <div class="no-video-icon">⏳</div>
-                    <div>Searching for next video...</div>
-                </div>
-
-            </div>
-
-            <div class="card">
-                <h2>📹 Recent Videos</h2>
-                <div class="thumbnail-grid">
-
-                </div>
-            </div>
-        </div>
-
-        <div style="text-align: center; color: #64748b; margin-top: 15px; padding: 12px; background: #1e293b; border-radius: 10px; font-size: 0.9em; border: 1px solid #334155;">
-            🔄 Auto-refreshes every 20 seconds | Your Engineering Eye 👁️
+    <div class="section">
+        <h2>🎯 GATE 1 PROGRESS</h2>
+        <div class="progress">
+            <div class="progress-fill" style="width: 13%"></div>
+            <div class="progress-text">13/100 RGB Demos (13%)</div>
         </div>
     </div>
+
+    <div class="section">
+        <h2>🔴 RECENT ACTIVITY (Last 10)</h2>
+        <div class="activity skipped">⏭️  SKIPPED - Already processed</div>
+        <div class="activity skipped">⏭️  SKIPPED - Already processed</div>
+        <div class="activity skipped">⏭️  SKIPPED - Already processed</div>
+        <div class="activity skipped">⏭️  SKIPPED - Already processed</div>
+        <div class="activity skipped">⏭️  SKIPPED - Already processed</div>
+        <div class="activity skipped">⏭️  SKIPPED - Too long: 424.0s</div>
+    </div>
+
+    <div class="section" style="border-color: #888; color: #888;">
+        <h2 style="color: #888;">💡 SYSTEM STATUS</h2>
+        <div class="stat">✅ Mining: ACTIVE</div>
+        <div class="stat">✅ Deduplication: WORKING</div>
+        <div class="stat">✅ Quality Threshold: 70/100</div>
+    </div>
+
 </body>
 </html>

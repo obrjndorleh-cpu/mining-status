@@ -1,0 +1,12 @@
+# Large data files - do NOT push to GitHub
+*.hdf5
+*.npz
+*.bag
+*.png
+*.jpg
+data_mine/
+batch_test_output/
+permanent_data/
+test_fixed_rgb/
+test_real_video/
+datasets/
