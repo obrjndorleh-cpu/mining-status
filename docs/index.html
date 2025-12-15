@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="30">
-    <title>Mining Monitor - 2025-12-14 22:02:47</title>
+    <meta http-equiv="refresh" content="20">
+    <title>Video Monitor - 2025-12-14 22:04:03</title>
     <style>
         * {
             margin: 0;
@@ -14,373 +14,237 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
+            background: #0f172a;
+            color: #e2e8f0;
             padding: 15px;
-            min-height: 100vh;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
         }
 
         .header {
-            background: white;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 15px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            border: 1px solid #334155;
         }
 
         .header h1 {
-            color: #667eea;
+            color: #60a5fa;
             font-size: 2em;
             margin-bottom: 8px;
         }
 
-        .status-badge {
+        .status-live {
             display: inline-block;
             padding: 6px 14px;
             border-radius: 15px;
+            background: #ef4444;
+            color: white;
             font-weight: bold;
             font-size: 0.9em;
-            margin-top: 8px;
+            animation: pulse 2s infinite;
         }
 
-        .status-running {
-            background: #10b981;
-            color: white;
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
         }
 
         .grid {
             display: grid;
-            grid-template-columns: 2fr 1fr;
+            grid-template-columns: 1.5fr 1fr;
             gap: 15px;
             margin-bottom: 15px;
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 1200px) {
             .grid {
                 grid-template-columns: 1fr;
             }
         }
 
         .card {
-            background: white;
+            background: #1e293b;
             border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            border: 1px solid #334155;
         }
 
         .card h2 {
-            color: #667eea;
+            color: #60a5fa;
             margin-bottom: 15px;
             font-size: 1.3em;
-            border-bottom: 2px solid #667eea;
+            border-bottom: 2px solid #334155;
             padding-bottom: 8px;
         }
 
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            margin-bottom: 15px;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .video-info {
+            background: #0f172a;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .video-title {
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 6px;
+            font-size: 0.95em;
+        }
+
+        .video-status {
+            color: #fbbf24;
+            font-size: 0.85em;
+        }
+
+        .activity-item {
+            background: #0f172a;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+
+        .activity-accepted {
+            border-color: #10b981;
+        }
+
+        .activity-rejected {
+            border-color: #ef4444;
+        }
+
+        .activity-score {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .score-good { color: #10b981; }
+        .score-bad { color: #ef4444; }
+
         .progress-bar {
             width: 100%;
-            height: 35px;
-            background: #e5e7eb;
-            border-radius: 17px;
+            height: 30px;
+            background: #0f172a;
+            border-radius: 15px;
             overflow: hidden;
             margin: 15px 0;
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: bold;
-            transition: width 0.5s ease;
-        }
-
-        .stat {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .stat:last-child {
-            border-bottom: none;
-        }
-
-        .activity-feed {
-            max-height: 500px;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-
-        .activity-item {
-            padding: 12px;
-            margin: 8px 0;
-            border-radius: 8px;
             font-size: 0.9em;
-            border-left: 4px solid;
         }
 
-        .activity-accepted {
-            background: #d1fae5;
-            border-color: #10b981;
-        }
-
-        .activity-rejected {
-            background: #fee2e2;
-            border-color: #ef4444;
-        }
-
-        .activity-skipped {
-            background: #fef3c7;
-            border-color: #f59e0b;
-        }
-
-        .activity-query {
-            background: #dbeafe;
-            border-color: #3b82f6;
-        }
-
-        .activity-icon {
-            font-size: 1.2em;
-            margin-right: 8px;
-        }
-
-        .activity-video {
-            font-weight: 600;
-            display: block;
-            margin: 4px 0;
-            color: #1f2937;
-        }
-
-        .activity-meta {
-            font-size: 0.85em;
-            color: #6b7280;
-        }
-
-        .stats-grid {
+        .thumbnail-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 15px;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            max-height: 600px;
+            overflow-y: auto;
         }
 
-        .stat-box {
-            background: #f9fafb;
-            padding: 15px;
+        .thumbnail-item {
+            background: #0f172a;
             border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #334155;
+        }
+
+        .thumbnail-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .thumbnail-item img:hover {
+            opacity: 0.8;
+        }
+
+        .thumbnail-info {
+            padding: 10px;
+        }
+
+        .no-video {
             text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
         }
 
-        .stat-number {
-            font-size: 2em;
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        .stat-label {
-            font-size: 0.85em;
-            color: #6b7280;
-            margin-top: 5px;
+        .no-video-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎯 Mining Monitor</h1>
-            <div style="font-size: 0.85em; color: #666;">Last Update: 2025-12-14 22:02:47</div>
-            <div class="status-badge status-running">
-                ✅ MINING ACTIVE
-                 (PID 2852)
-            </div>
-        </div>
-
-        <div class="stats-grid">
-            <div class="stat-box">
-                <div class="stat-number">11</div>
-                <div class="stat-label">RGB Demos</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">0</div>
-                <div class="stat-label">Accepted (Recent)</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">0</div>
-                <div class="stat-label">Rejected (Recent)</div>
-            </div>
+            <h1>🎬 Live Video Monitor</h1>
+            <div style="font-size: 0.85em; color: #94a3b8; margin-bottom: 8px;">2025-12-14 22:04:03</div>
+            <div class="status-live">🔴 LIVE</div>
         </div>
 
         <div class="card" style="margin-bottom: 15px;">
-            <h2>📊 Gate 1 Progress</h2>
+            <h2>📊 Progress: 11/100 Demos</h2>
             <div class="progress-bar">
                 <div class="progress-fill" style="width: 11.0%">
-                    11/100 (11.0%)
+                    11.0%
                 </div>
             </div>
         </div>
 
         <div class="grid">
             <div class="card">
-                <h2>🔴 Live Activity Feed</h2>
-                <div class="activity-feed">
+                <h2>🎥 Currently Processing</h2>
 
-                    <div class="activity-item activity-query">
-                        <span class="activity-icon">🔍</span>
-                        <strong>Searching:</strong> sliding door demonstration
-                    </div>
-
-                    <div class="activity-item activity-skipped">
-                        <span class="activity-icon">⏭️</span>
-                        <span class="activity-video">Unknown</span>
-                        <span class="activity-meta">Skipped - Too long (135.0s)</span>
-                    </div>
-
-                    <div class="activity-item activity-skipped">
-                        <span class="activity-icon">⏭️</span>
-                        <span class="activity-video">Unknown</span>
-                        <span class="activity-meta">Skipped - Too long (525.0s)</span>
-                    </div>
-
-                    <div class="activity-item activity-skipped">
-                        <span class="activity-icon">⏭️</span>
-                        <span class="activity-video">Unknown</span>
-                        <span class="activity-meta">Skipped - Too long (602.0s)</span>
-                    </div>
-
-                    <div class="activity-item activity-query">
-                        <span class="activity-icon">🔍</span>
-                        <strong>Searching:</strong> rotating object tutorial
-                    </div>
-
-                    <div class="activity-item activity-skipped">
-                        <span class="activity-icon">⏭️</span>
-                        <span class="activity-video">Unknown</span>
-                        <span class="activity-meta">Skipped - Already processed</span>
-                    </div>
-
-                    <div class="activity-item activity-skipped">
-                        <span class="activity-icon">⏭️</span>
-                        <span class="activity-video">Unknown</span>
-                        <span class="activity-meta">Skipped - Already processed</span>
-                    </div>
-
-                    <div class="activity-item activity-skipped">
-                        <span class="activity-icon">⏭️</span>
-                        <span class="activity-video">Unknown</span>
-                        <span class="activity-meta">Skipped - Too long (440.0s)</span>
-                    </div>
-
-                    <div class="activity-item activity-query">
-                        <span class="activity-icon">🔍</span>
-                        <strong>Searching:</strong> turning knob demonstration
-                    </div>
-
-                    <div class="activity-item activity-skipped">
-                        <span class="activity-icon">⏭️</span>
-                        <span class="activity-video">Unknown</span>
-                        <span class="activity-meta">Skipped - Too long (43.0s)</span>
-                    </div>
-
-                    <div class="activity-item activity-skipped">
-                        <span class="activity-icon">⏭️</span>
-                        <span class="activity-video">Unknown</span>
-                        <span class="activity-meta">Skipped - Too long (86.0s)</span>
-                    </div>
-
-                    <div class="activity-item activity-skipped">
-                        <span class="activity-icon">⏭️</span>
-                        <span class="activity-video">Unknown</span>
-                        <span class="activity-meta">Skipped - Too long (238.0s)</span>
-                    </div>
-
-                    <div class="activity-item activity-query">
-                        <span class="activity-icon">🔍</span>
-                        <strong>Searching:</strong> twisting bottle cap
-                    </div>
-
-                    <div class="activity-item activity-skipped">
-                        <span class="activity-icon">⏭️</span>
-                        <span class="activity-video">Unknown</span>
-                        <span class="activity-meta">Skipped - Too long (961.0s)</span>
-                    </div>
-
-                    <div class="activity-item activity-skipped">
-                        <span class="activity-icon">⏭️</span>
-                        <span class="activity-video">Unknown</span>
-                        <span class="activity-meta">Skipped - Too long (30.0s)</span>
-                    </div>
-
-                    <div class="activity-item activity-skipped">
-                        <span class="activity-icon">⏭️</span>
-                        <span class="activity-video">Unknown</span>
-                        <span class="activity-meta">Skipped - Already processed</span>
-                    </div>
-
+                <div class="no-video">
+                    <div class="no-video-icon">⏳</div>
+                    <div>Searching for next video...</div>
                 </div>
+
             </div>
 
-            <div>
-                <div class="card" style="margin-bottom: 15px;">
-                    <h2>📁 Recent Files</h2>
+            <div class="card">
+                <h2>📹 Recent Videos</h2>
+                <div class="thumbnail-grid">
 
-                    <div style="padding: 10px; background: #f9fafb; border-radius: 6px; margin: 6px 0; font-size: 0.85em;">
-                        <div style="color: #667eea; font-weight: bold;">21:14:14</div>
-                        <div style="color: #10b981; font-weight: bold;">22.0 MB</div>
-                        <div style="color: #1f2937;">Telescopic Sliding Doors ｜ Modern Space-</div>
-                    </div>
-
-                    <div style="padding: 10px; background: #f9fafb; border-radius: 6px; margin: 6px 0; font-size: 0.85em;">
-                        <div style="color: #667eea; font-weight: bold;">21:10:36</div>
-                        <div style="color: #10b981; font-weight: bold;">9.9 MB</div>
-                        <div style="color: #1f2937;">BE CAREFUL ⚠️ IT’S SLIPPERY! 😱 With： @Wi</div>
-                    </div>
-
-                    <div style="padding: 10px; background: #f9fafb; border-radius: 6px; margin: 6px 0; font-size: 0.85em;">
-                        <div style="color: #667eea; font-weight: bold;">20:58:10</div>
-                        <div style="color: #10b981; font-weight: bold;">32.3 MB</div>
-                        <div style="color: #1f2937;">Repost： Just keep trying💪😤 #griptok #gri</div>
-                    </div>
-
-                    <div style="padding: 10px; background: #f9fafb; border-radius: 6px; margin: 6px 0; font-size: 0.85em;">
-                        <div style="color: #667eea; font-weight: bold;">20:19:25</div>
-                        <div style="color: #10b981; font-weight: bold;">5.8 MB</div>
-                        <div style="color: #1f2937;">Alice 3.1 demo： Picking up objects</div>
-                    </div>
-
-                    <div style="padding: 10px; background: #f9fafb; border-radius: 6px; margin: 6px 0; font-size: 0.85em;">
-                        <div style="color: #667eea; font-weight: bold;">20:03:58</div>
-                        <div style="color: #10b981; font-weight: bold;">48.5 MB</div>
-                        <div style="color: #1f2937;">YOU’VE BEEN OPENING BEER BOTTLES WRONG Y</div>
-                    </div>
-
-                </div>
-
-                <div class="card">
-                    <h2>⚙️ System</h2>
-                    <div class="stat">
-                        <span>Total Demos</span>
-                        <span style="font-weight: bold;">11/100</span>
-                    </div>
-                    <div class="stat">
-                        <span>Total Size</span>
-                        <span style="font-weight: bold;">252.5 MB</span>
-                    </div>
-                    <div class="stat">
-                        <span>Skipped</span>
-                        <span style="font-weight: bold;">12</span>
-                    </div>
                 </div>
             </div>
         </div>
 
-        <div style="text-align: center; color: white; margin-top: 15px; padding: 12px; background: rgba(255,255,255,0.1); border-radius: 10px; font-size: 0.9em;">
-            🔄 Auto-refreshes every 30 seconds | Your Engineering Eye 👁️
+        <div style="text-align: center; color: #64748b; margin-top: 15px; padding: 12px; background: #1e293b; border-radius: 10px; font-size: 0.9em; border: 1px solid #334155;">
+            🔄 Auto-refreshes every 20 seconds | Your Engineering Eye 👁️
         </div>
     </div>
 </body>
