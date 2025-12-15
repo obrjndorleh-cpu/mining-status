@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="60">
-    <title>Mining Dashboard - 2025-12-14 21:38:39</title>
+    <meta http-equiv="refresh" content="30">
+    <title>Mining Monitor - 2025-12-14 21:40:35</title>
     <style>
         * {
             margin: 0;
@@ -13,43 +13,39 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #333;
-            padding: 20px;
+            padding: 15px;
             min-height: 100vh;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
         .header {
             background: white;
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
 
         .header h1 {
             color: #667eea;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-
-        .timestamp {
-            color: #666;
-            font-size: 0.9em;
+            font-size: 2em;
+            margin-bottom: 8px;
         }
 
         .status-badge {
             display: inline-block;
-            padding: 8px 16px;
-            border-radius: 20px;
+            padding: 6px 14px;
+            border-radius: 15px;
             font-weight: bold;
-            margin-top: 10px;
+            font-size: 0.9em;
+            margin-top: 8px;
         }
 
         .status-running {
@@ -57,37 +53,58 @@
             color: white;
         }
 
-        .status-stopped {
-            background: #ef4444;
-            color: white;
-        }
-
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
+            grid-template-columns: 2fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 900px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .card {
             background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
 
         .card h2 {
             color: #667eea;
-            margin-bottom: 20px;
-            font-size: 1.5em;
+            margin-bottom: 15px;
+            font-size: 1.3em;
             border-bottom: 2px solid #667eea;
-            padding-bottom: 10px;
+            padding-bottom: 8px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 35px;
+            background: #e5e7eb;
+            border-radius: 17px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: width 0.5s ease;
         }
 
         .stat {
             display: flex;
             justify-content: space-between;
-            padding: 10px 0;
+            padding: 8px 0;
             border-bottom: 1px solid #eee;
         }
 
@@ -95,173 +112,275 @@
             border-bottom: none;
         }
 
-        .stat-label {
-            color: #666;
-            font-weight: 500;
+        .activity-feed {
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 10px;
         }
 
-        .stat-value {
-            color: #333;
-            font-weight: bold;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 40px;
-            background: #e5e7eb;
-            border-radius: 20px;
-            overflow: hidden;
-            margin: 20px 0;
-            position: relative;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-            transition: width 0.5s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-        }
-
-        .file-item {
-            padding: 10px;
-            background: #f9fafb;
-            border-radius: 8px;
+        .activity-item {
+            padding: 12px;
             margin: 8px 0;
+            border-radius: 8px;
             font-size: 0.9em;
+            border-left: 4px solid;
         }
 
-        .file-time {
-            color: #667eea;
-            font-weight: bold;
+        .activity-accepted {
+            background: #d1fae5;
+            border-color: #10b981;
         }
 
-        .file-size {
-            color: #10b981;
-            font-weight: bold;
+        .activity-rejected {
+            background: #fee2e2;
+            border-color: #ef4444;
         }
 
-        .auto-refresh {
-            text-align: center;
-            color: white;
-            margin-top: 20px;
+        .activity-skipped {
+            background: #fef3c7;
+            border-color: #f59e0b;
+        }
+
+        .activity-query {
+            background: #dbeafe;
+            border-color: #3b82f6;
+        }
+
+        .activity-icon {
+            font-size: 1.2em;
+            margin-right: 8px;
+        }
+
+        .activity-video {
+            font-weight: 600;
+            display: block;
+            margin: 4px 0;
+            color: #1f2937;
+        }
+
+        .activity-meta {
+            font-size: 0.85em;
+            color: #6b7280;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .stat-box {
+            background: #f9fafb;
             padding: 15px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
+            border-radius: 8px;
+            text-align: center;
         }
 
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.8em;
-            }
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
 
-            .grid {
-                grid-template-columns: 1fr;
-            }
+        .stat-label {
+            font-size: 0.85em;
+            color: #6b7280;
+            margin-top: 5px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎯 Video Intelligence Mining</h1>
-            <div class="timestamp">Last Updated: 2025-12-14 21:38:39</div>
+            <h1>🎯 Mining Monitor</h1>
+            <div style="font-size: 0.85em; color: #666;">Last Update: 2025-12-14 21:40:35</div>
             <div class="status-badge status-running">
-                ✅ RUNNING
+                ✅ MINING ACTIVE
                  (PID 2852)
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-number">11</div>
+                <div class="stat-label">RGB Demos</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">0</div>
+                <div class="stat-label">Accepted (Recent)</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">0</div>
+                <div class="stat-label">Rejected (Recent)</div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-bottom: 15px;">
+            <h2>📊 Gate 1 Progress</h2>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 11.0%">
+                    11/100 (11.0%)
+                </div>
             </div>
         </div>
 
         <div class="grid">
             <div class="card">
-                <h2>📊 Gate 1 Progress</h2>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 11.0%">
-                        11/100 (11.0%)
+                <h2>🔴 Live Activity Feed</h2>
+                <div class="activity-feed">
+
+                    <div class="activity-item activity-query">
+                        <span class="activity-icon">🔍</span>
+                        <strong>Searching:</strong> opening drawer demonstration
+                    </div>
+
+                    <div class="activity-item activity-skipped">
+                        <span class="activity-icon">⏭️</span>
+                        <span class="activity-video">Unknown</span>
+                        <span class="activity-meta">Skipped - Too long (51.0s)</span>
+                    </div>
+
+                    <div class="activity-item activity-skipped">
+                        <span class="activity-icon">⏭️</span>
+                        <span class="activity-video">Unknown</span>
+                        <span class="activity-meta">Skipped - Already processed</span>
+                    </div>
+
+                    <div class="activity-item activity-skipped">
+                        <span class="activity-icon">⏭️</span>
+                        <span class="activity-video">Unknown</span>
+                        <span class="activity-meta">Skipped - Too long (517.0s)</span>
+                    </div>
+
+                    <div class="activity-item activity-query">
+                        <span class="activity-icon">🔍</span>
+                        <strong>Searching:</strong> opening cabinet door tutorial
+                    </div>
+
+                    <div class="activity-item activity-skipped">
+                        <span class="activity-icon">⏭️</span>
+                        <span class="activity-video">Unknown</span>
+                        <span class="activity-meta">Skipped - Too long (52.0s)</span>
+                    </div>
+
+                    <div class="activity-item activity-skipped">
+                        <span class="activity-icon">⏭️</span>
+                        <span class="activity-video">Unknown</span>
+                        <span class="activity-meta">Skipped - Too long (46.0s)</span>
+                    </div>
+
+                    <div class="activity-item activity-skipped">
+                        <span class="activity-icon">⏭️</span>
+                        <span class="activity-video">Unknown</span>
+                        <span class="activity-meta">Skipped - Too long (228.0s)</span>
+                    </div>
+
+                    <div class="activity-item activity-query">
+                        <span class="activity-icon">🔍</span>
+                        <strong>Searching:</strong> opening refrigerator side view
+                    </div>
+
+                    <div class="activity-item activity-skipped">
+                        <span class="activity-icon">⏭️</span>
+                        <span class="activity-video">Unknown</span>
+                        <span class="activity-meta">Skipped - Too long (92.0s)</span>
+                    </div>
+
+                    <div class="activity-item activity-skipped">
+                        <span class="activity-icon">⏭️</span>
+                        <span class="activity-video">Unknown</span>
+                        <span class="activity-meta">Skipped - Too long (133.0s)</span>
+                    </div>
+
+                    <div class="activity-item activity-skipped">
+                        <span class="activity-icon">⏭️</span>
+                        <span class="activity-video">Unknown</span>
+                        <span class="activity-meta">Skipped - Too long (199.0s)</span>
+                    </div>
+
+                    <div class="activity-item activity-query">
+                        <span class="activity-icon">🔍</span>
+                        <strong>Searching:</strong> proper lifting technique
+                    </div>
+
+                    <div class="activity-item activity-skipped">
+                        <span class="activity-icon">⏭️</span>
+                        <span class="activity-video">Unknown</span>
+                        <span class="activity-meta">Skipped - Too long (133.0s)</span>
+                    </div>
+
+                    <div class="activity-item activity-skipped">
+                        <span class="activity-icon">⏭️</span>
+                        <span class="activity-video">Unknown</span>
+                        <span class="activity-meta">Skipped - Too long (136.0s)</span>
+                    </div>
+
+                    <div class="activity-item activity-skipped">
+                        <span class="activity-icon">⏭️</span>
+                        <span class="activity-video">Unknown</span>
+                        <span class="activity-meta">Skipped - Too long (89.0s)</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div>
+                <div class="card" style="margin-bottom: 15px;">
+                    <h2>📁 Recent Files</h2>
+
+                    <div style="padding: 10px; background: #f9fafb; border-radius: 6px; margin: 6px 0; font-size: 0.85em;">
+                        <div style="color: #667eea; font-weight: bold;">21:14:14</div>
+                        <div style="color: #10b981; font-weight: bold;">22.0 MB</div>
+                        <div style="color: #1f2937;">Telescopic Sliding Doors ｜ Modern Space-</div>
+                    </div>
+
+                    <div style="padding: 10px; background: #f9fafb; border-radius: 6px; margin: 6px 0; font-size: 0.85em;">
+                        <div style="color: #667eea; font-weight: bold;">21:10:36</div>
+                        <div style="color: #10b981; font-weight: bold;">9.9 MB</div>
+                        <div style="color: #1f2937;">BE CAREFUL ⚠️ IT’S SLIPPERY! 😱 With： @Wi</div>
+                    </div>
+
+                    <div style="padding: 10px; background: #f9fafb; border-radius: 6px; margin: 6px 0; font-size: 0.85em;">
+                        <div style="color: #667eea; font-weight: bold;">20:58:10</div>
+                        <div style="color: #10b981; font-weight: bold;">32.3 MB</div>
+                        <div style="color: #1f2937;">Repost： Just keep trying💪😤 #griptok #gri</div>
+                    </div>
+
+                    <div style="padding: 10px; background: #f9fafb; border-radius: 6px; margin: 6px 0; font-size: 0.85em;">
+                        <div style="color: #667eea; font-weight: bold;">20:19:25</div>
+                        <div style="color: #10b981; font-weight: bold;">5.8 MB</div>
+                        <div style="color: #1f2937;">Alice 3.1 demo： Picking up objects</div>
+                    </div>
+
+                    <div style="padding: 10px; background: #f9fafb; border-radius: 6px; margin: 6px 0; font-size: 0.85em;">
+                        <div style="color: #667eea; font-weight: bold;">20:03:58</div>
+                        <div style="color: #10b981; font-weight: bold;">48.5 MB</div>
+                        <div style="color: #1f2937;">YOU’VE BEEN OPENING BEER BOTTLES WRONG Y</div>
+                    </div>
+
+                </div>
+
+                <div class="card">
+                    <h2>⚙️ System</h2>
+                    <div class="stat">
+                        <span>Total Demos</span>
+                        <span style="font-weight: bold;">11/100</span>
+                    </div>
+                    <div class="stat">
+                        <span>Total Size</span>
+                        <span style="font-weight: bold;">252.5 MB</span>
+                    </div>
+                    <div class="stat">
+                        <span>Skipped</span>
+                        <span style="font-weight: bold;">12</span>
                     </div>
                 </div>
-                <div class="stat">
-                    <span class="stat-label">RGB Demos</span>
-                    <span class="stat-value">11</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-label">Total Size</span>
-                    <span class="stat-value">252.5 MB</span>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>⛏️ Mining Stats</h2>
-                <div class="stat">
-                    <span class="stat-label">Current Query</span>
-                    <span class="stat-value">lifting object ergonomic</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-label">Accepted</span>
-                    <span class="stat-value">0</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-label">Rejected</span>
-                    <span class="stat-value">1</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-label">Acceptance Rate</span>
-                    <span class="stat-value">0.0%</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-label">Skipped (Dedup)</span>
-                    <span class="stat-value">5</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-label">Log Lines</span>
-                    <span class="stat-value">9,824</span>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>🔒 Deduplication</h2>
-                <div class="stat">
-                    <span class="stat-label">URLs Tracked</span>
-                    <span class="stat-value">55</span>
-                </div>
-                <div class="stat"><span class="stat-label">System Health</span><span class="stat-value">✅ Working</span></div>
             </div>
         </div>
 
-        <div class="card">
-            <h2>📁 Recent Files</h2>
-            <div class="file-item">
-                <span class="file-time">⏰ 21:14:14</span> |
-                <span class="file-size">22.0 MB</span> |
-                Telescopic Sliding Doors ｜ Modern Space-Saving Glass Solutio
-            </div>
-            <div class="file-item">
-                <span class="file-time">⏰ 21:10:36</span> |
-                <span class="file-size">9.9 MB</span> |
-                BE CAREFUL ⚠️ IT’S SLIPPERY! 😱 With： @Winchumbo
-            </div>
-            <div class="file-item">
-                <span class="file-time">⏰ 20:58:10</span> |
-                <span class="file-size">32.3 MB</span> |
-                Repost： Just keep trying💪😤 #griptok #gripzilla #gripstrength
-            </div>
-            <div class="file-item">
-                <span class="file-time">⏰ 20:19:25</span> |
-                <span class="file-size">5.8 MB</span> |
-                Alice 3.1 demo： Picking up objects
-            </div>
-            <div class="file-item">
-                <span class="file-time">⏰ 20:03:58</span> |
-                <span class="file-size">48.5 MB</span> |
-                YOU’VE BEEN OPENING BEER BOTTLES WRONG YOUR WHOLE LIFE!!! 🔥🍺
-            </div>
-        </div>
-
-        <div class="auto-refresh">
-            🔄 Auto-refreshes every 60 seconds
+        <div style="text-align: center; color: white; margin-top: 15px; padding: 12px; background: rgba(255,255,255,0.1); border-radius: 10px; font-size: 0.9em;">
+            🔄 Auto-refreshes every 30 seconds | Your Engineering Eye 👁️
         </div>
     </div>
 </body>
