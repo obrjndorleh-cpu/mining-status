@@ -1,0 +1,12 @@
+{
+  "timestamp": "2025-12-21T21:38:53.818356",
+  "validation_results": {
+    "total_episodes": 10,
+    "successful_episodes": 10,
+    "failed_episodes": 0,
+    "avg_reward": 30.349856100415288,
+    "avg_steps": 500.0,
+    "episode_details": [
+      {
+        "episode": 1,
+        "success": 
