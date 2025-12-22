@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="60">
+    <title>Robot Validation Dashboard - 2025-12-21 21:25:50</title>
+    <style>
+        body {
+            font-family: -apple-system, sans-serif;
+            background: #000;
+            color: #0f0;
+            padding: 20px;
+            margin: 0;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h1 {
+            color: #0f0;
+            font-size: 32px;
+            margin: 10px 0;
+        }
+        .status {
+            background: #111;
+            border: 2px solid #0f0;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 800px;
+            border-radius: 10px;
+        }
+        .metric {
+            display: inline-block;
+            margin: 15px 30px;
+            text-align: center;
+        }
+        .metric-value {
+            font-size: 36px;
+            font-weight: bold;
+            color: #0f0;
+        }
+        .metric-label {
+            font-size: 14px;
+            color: #888;
+            margin-top: 5px;
+        }
+        .dashboard-image {
+            width: 100%;
+            max-width: 1600px;
+            margin: 20px auto;
+            display: block;
+            border: 3px solid #0f0;
+            border-radius: 10px;
+        }
+        .info {
+            text-align: center;
+            color: #888;
+            margin: 20px 0;
+        }
+        .links {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .links a {
+            color: #0f0;
+            text-decoration: none;
+            margin: 0 15px;
+            padding: 10px 20px;
+            border: 1px solid #0f0;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .links a:hover {
+            background: #0f0;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🤖 ROBOT VALIDATION DASHBOARD</h1>
+        <div style="color: #888;">Real-Time Policy Validation System</div>
+    </div>
+
+    <div class="status">
+        <div class="metric">
+            <div class="metric-value">94.0%</div>
+            <div class="metric-label">Success Rate</div>
+        </div>
+        <div class="metric">
+            <div class="metric-value">0.0391</div>
+            <div class="metric-label">Avg Error</div>
+        </div>
+        <div class="metric">
+            <div class="metric-value">94/100</div>
+            <div class="metric-label">Production Grade</div>
+        </div>
+    </div>
+
+    <img src="validation_dashboard.png?t=1766370350"
+         alt="Validation Dashboard" class="dashboard-image">
+
+    <div class="info">
+        <strong>What You're Seeing:</strong><br>
+        • Camera View: What the robot's camera sees<br>
+        • Brain Prediction: Green = Human action, Yellow = AI prediction<br>
+        • Numerical Data: Exact action values and errors<br>
+        • Accuracy Meters: How well the AI matches human performance<br>
+    </div>
+
+    <div class="info">
+        Last Updated: 2025-12-21 21:25:50 | Auto-refresh: 60 seconds
+    </div>
+
+    <div class="links">
+        <a href="index.html">Mining Dashboard</a>
+        <a href="live_dashboard.html">Live Metrics</a>
+        <a href="../VALIDATION_REPORT.txt" target="_blank">Full Report</a>
+    </div>
+
+    <div class="info" style="margin-top: 50px; font-size: 12px;">
+        <strong>Open-Source Tools Used:</strong><br>
+        <a href="https://robosuite.ai/" target="_blank" style="color: #0f0;">Robosuite</a> |
+        <a href="https://mujoco.org/" target="_blank" style="color: #0f0;">MuJoCo</a> |
+        <a href="https://pytorch.org/" target="_blank" style="color: #0f0;">PyTorch</a>
+    </div>
+</body>
+</html>
